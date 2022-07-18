@@ -1,0 +1,104 @@
+1. sudo addgroup hadoop
+   password-
+
+2. sudo adduser --ingroup hadoop hduser
+	Adding user `hduser' ...
+	Adding new user `hduser' (1002) with group `hadoop' ...
+	Creating home directory `/home/hduser' ...
+	Copying files from `/etc/skel' ...
+	Enter new UNIX password: 
+	Retype new UNIX password: 
+	passwd: password updated successfully
+	Changing the user information for hduser
+	Enter the new value, or press ENTER for the default
+		Full Name []: 
+		Room Number []: 
+		Work Phone []: 
+		Home Phone []: 
+		Other []: 
+	Is the information correct? [Y/n] Y
+Note- we can see hduser created or not by the following
+      $cd /home
+      /home$ ls
+       expert hduser
+
+3.$ sudo gedit /etc/sudoers
+   
+ # User privilege specification
+   root	ALL=(ALL:ALL) ALL
+ 
+ add the following below this line
+   hduser ALL=(ALL:ALL) ALL
+ 
+
+4.su - hduser
+password-
+
+5. ssh-keygen -t rsa
+press enter
+
+6. To authorize a key
+   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_key
+
+7.Disabling ipv6cd
+   sudo gedit /etc/sysctl.conf 
+
+# disable ipv6cd
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+8.sudo cp -R /home/expert/hadoop-2.9.2 ~/hadoop
+  sudo cp -R /home/expert/jdk1.8.0_191 ~/java
+ (copying hadoop and java from local to hduser)
+
+9.sudo gedit ~/.bashrc
+  setting java and hadoop path in bashrc file
+	
+export JAVA_HOME=/home/hduser/java
+PATH="$JAVA_HOME/bin":$PATH
+export HADOOP_HOME=/home/hduser/hadoop
+PATH="$HADOOP_HOME/bin":"$HADOOP_HOME/sbin":$PATH
+
+save and close
+
+9. source ~/.bashrc
+
+10. sudo chmod -R 777 hadoop   ; for giving permission to the file
+    sudo chmod -R 777 java
+    sudo chown -R hduser:hadoop hadoop   ;for ownership
+
+11.java -version
+    hadoop
+
+12.sudo gedit /home/hduser/hadoop/etc/hadoop/hadoop-env.sh
+
+set the java path
+# The java implementation to use.
+export JAVA_HOME="/home/hduser/java"
+
+13. sudo mkdir -p /app/hadoop/tmp 
+        #(The temp directory is for storing the 5 daemons of hadoop).
+    sudo ls -l /app
+
+14.sudo chmod -R 777 /app          # -R is for giving permissions to all the sub directories in a directory
+   sudo chown -R hduser:hadoop /app
+
+15. sudo cp -R /home/expert/Downloads/configs/*.xml ~/hadoop/etc/hadoop/
+
+16. sudo apt-get install openssh-server 
+     (for installing localhost)
+
+17.ssh localhost      # ssh is secure shell
+
+18.hadoop
+   java -version
+
+19.hadoop namenode -format
+
+20.start-all.sh
+
+21.jps   #jps is java process status.It is for veryfying all the daemons
+   
+    
+ 
